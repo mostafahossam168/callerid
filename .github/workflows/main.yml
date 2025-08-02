@@ -25,7 +25,7 @@ jobs:
             cd ~/domains/pxsa.org || exit 1
             if [ -d "callerid/.git" ]; then
               echo "🔄 Folder exists, pulling latest changes..."
-              cd callerid && git pull origin main
+              cd callerid && git pull origin master
             else
               echo "📦 Cloning the repo..."
               git clone https://github.com/mostafahossam168/callerid.git
