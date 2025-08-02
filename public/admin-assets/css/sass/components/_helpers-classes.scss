@@ -1,0 +1,38 @@
+.py-60 {
+    padding-top: 60px;
+    padding-bottom: 60px;
+}
+.row-gap-24 {
+    row-gap: 24px;
+}
+
+.w-fit {
+    width: fit-content;
+}
+
+.drop-fs {
+    font-size: 12px;
+}
+.fs-12 {
+    font-size: 12px;
+}
+.fs-11 {
+    font-size: 11px;
+}
+
+.title-bg-color {
+    font-size: 14px !important;
+    background-color: #34c5e4;
+}
+
+
+.table-role {
+    border: 1px solid #dee2e6;
+    tbody {
+        border-top: none !important;
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+            box-shadow: inset -20px 0px 0 20px #f2f2f2;
+        }
+    }
+}

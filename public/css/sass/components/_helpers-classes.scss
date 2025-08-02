@@ -1,0 +1,205 @@
+.text-main-color {
+    color: $main-color;
+}
+
+.bg-main-color {
+    background-color: $main-color;
+}
+
+.text-main-color {
+    color: $main-color;
+}
+
+.py-60 {
+    padding-top: 60px;
+    padding-bottom: 60px;
+}
+
+.row-gap-24 {
+    row-gap: 24px;
+}
+.btn-xs {
+    font-size: 12px !important;
+    padding: 4px 8px !important;
+}
+
+.fs-10px {
+font-size: 10px;
+}
+.fs-11px {
+font-size: 11px;
+}
+.fs-12px {
+    font-size: 12px !important;
+}
+.fs-13px {
+    font-size: 13px !important;
+}
+.fs-14px {
+    font-size: 14px !important;
+}
+.fs-15px {
+    font-size: 15px !important;
+}
+.fs-18px {
+    font-size: 18px !important;
+}
+.fs-17px {
+    font-size: 17px;
+}
+// create popup
+.popup-bg {
+    position: fixed;
+    top: 0%;
+    left: 0%;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    @include centering;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity $main-transition;
+    &.popupBg-active {
+        visibility: visible;
+        opacity: 1;
+    }
+    .popup-content {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        width: 50%;
+        height: 50%;
+        border-radius: 0.3rem;
+        padding: 1.5rem;
+        background-color: $white-color;
+        .popup-close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-weight: bold;
+            background-color: transparent;
+        }
+    }
+}
+
+.inp {
+    background-color: #f3f3f3;
+    &::placeholder {
+        font-size: 10px;
+    }
+}
+
+// Helpers Width
+.w-55 {
+    width: 55%;
+}
+.w-60 {
+    width: 60%;
+}
+.w-150px {
+    width: 150px !important;
+}
+.w-250px {
+    width: 250px !important;
+}
+.w-120px {
+    width: 120px !important;
+}
+.w-200px {
+    width: 200px !important;
+}
+.w-180px {
+    width: 180px !important;
+}
+.w-fit {
+    width: fit-content !important;
+}
+
+.sm-tooltip {
+    .tooltip-inner {
+        width: fit-content !important;
+        padding: 4px 10px 6px 10px !important;
+    }
+}
+
+// Helpers Border
+.b-border {
+    border: 1px solid #dddddd;
+}
+.full-bottom-border {
+    border-bottom: 1px solid #dddddd;
+    padding-bottom: 7px;
+    margin-bottom: 0px !important;
+}
+.right-b {
+    border-right: 1px solid #d5d3d3;
+    padding-right: 4px;
+}
+
+// Helpers Bg Color & Colors
+.alt-bg-color {
+    background-color: $main-color;
+}
+.alt2-bg-color {
+    font-size: 14px !important;
+    background-color: #0991acdb;
+}
+.alt-text-color {
+    color: $main-color;
+}
+
+.color-gr {
+    color: #2ba670;
+}
+
+// Helpers Cursor
+.cursor-auto {
+    cursor: auto;
+}
+
+// Helpers Links Effect
+.link-one {
+    transition: $transition;
+    font-size: 15px;
+    color: #777;
+    &:hover {
+        color: #303030;
+    }
+}
+
+.info-pas {
+    display: none;
+}
+
+// tables
+.table-dark th {
+    background-color: #243848 !important;
+}
+.table,
+.table thead {
+    box-shadow: 0 0 5px 0 #ddd;
+    border-radius: 5px;
+}
+
+.info-data {
+    font-size: 12px;
+    padding: 8px 15px;
+    color: #404040;
+    border-radius: 5px;
+    border: 1px solid $main-color;
+}
+
+
+span.a_word {
+    font-size: 12px;
+    color: #6e6e6e;
+}
+
+.rotate-90deg {
+    transform: rotate(90deg);
+}
+
+.qr-table svg {
+    width: 50px;
+    height: 50px;
+}

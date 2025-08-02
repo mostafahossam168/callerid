@@ -1,0 +1,28 @@
+on: push
+name: 🚀 Deploy website on push number
+jobs:
+  web-deploy:
+    name: 🎉 Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print github
+        run: echo ${{ toJson(github) }}
+
+      # - name: Run migrations , clear cache for views, config and routes
+      #   uses: fifsky/ssh-action@master
+      #   with:
+      #     command: |
+      #       cd domains/pxsa.org/public_html_danimals/d-animals
+      #       git pull origin master
+      #       php artisan migrate
+      #       php artisan optimize:clear
+
+
+      #     host: ${{ vars.HOST }}
+      #     user:  ${{ vars.USER_NAME }}
+      #     port: 65002
+      #     key: ${{ secrets.KEY_PRIVATE }}
+      #     pass: ${{ secrets.PASSWORD }}
+      #     args: -tt
+
+
