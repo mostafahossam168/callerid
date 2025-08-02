@@ -13,7 +13,7 @@ jobs:
         uses: fifsky/ssh-action@master
         with:
           command: |
-            cd domains/pxsa.org/public_html_danimals/d-animals
+            cd domains/pxsa.org/public_html_danimals/callerid
             git pull origin master
             php artisan migrate
             php artisan optimize:clear
