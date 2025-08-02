@@ -15,8 +15,7 @@ jobs:
           command: |
             cd domains/pxsa.org/public_html_danimals/callerid
             git pull origin master
-            php artisan migrate
-            php artisan optimize:clear
+
 
 
           host: ${{ vars.HOST }}
