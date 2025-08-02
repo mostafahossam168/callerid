@@ -31,14 +31,16 @@ jobs:
               echo "📦 Cloning the repo..."
               git clone https://github.com/mostafahossam168/callerid.git
               cd callerid
+
+              echo "🔑 Generating app key"
+              php ~/composer.phar install --no-interaction --prefer-dist
+              cp .env.example .env
+              php artisan key:generate
+              php artisan migrate
             fi
 
 
-            echo "🔑 Generating app key"
-            php ~/composer.phar install --no-interaction --prefer-dist
-            cp .env.example .env
-            php artisan key:generate
-            php artisan migrate
+
 
             echo "🧼 Clearing cache"
             php artisan config:clear
