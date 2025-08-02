@@ -38,6 +38,7 @@ jobs:
             php ~/composer.phar install --no-interaction --prefer-dist
             cp .env.example .env
             php artisan key:generate
+            php artisan migrate
 
             echo "🧼 Clearing cache"
             php artisan config:clear
