@@ -1,7 +1,8 @@
 on:
-  pull_request:
-    types:
-      - closed
+  push
+  # pull_request:
+  #   types:
+  #     - closed
 
 name: 🚀 Deploy website on PR merge
 run-name: Deploy by ${{ github.actor }} on PR #${{ github.event.pull_request.number }}
@@ -10,7 +11,7 @@ jobs:
   web-deploy:
     name: 🎉 Deploy on Hostinger
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
+    # if: github.event.pull_request.merged == true
     steps:
       - name: Connect & deploy via SSH
         uses: fifsky/ssh-action@master
@@ -31,4 +32,16 @@ jobs:
               git clone https://github.com/mostafahossam168/callerid.git
               cd callerid
             fi
+
+
+            echo "🔑 Generating app key"
+            php ~/composer.phar install --no-interaction --prefer-dist
+            cp .env.example .env
+            php artisan key:generate
+            php artisan migrate
+
+            echo "🧼 Clearing cache"
+            php artisan config:clear
+            php artisan route:clear
+            php artisan view:clear
 
