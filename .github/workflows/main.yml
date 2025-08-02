@@ -8,8 +8,8 @@ jobs:
   web-deploy:
     name: 🎉 Deploy
     runs-on: ubuntu-latest
+    if: github.pull_request.merged==true
     steps:
-      if: github.pull_request.merged==true
       - name: Run migrations , clear cache for views, config and routes
         uses: fifsky/ssh-action@master
         with:
