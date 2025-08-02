@@ -13,7 +13,7 @@ jobs:
         uses: fifsky/ssh-action@master
         with:
           command: |
-            cd domains/pxsa.org/public_html_danimals/callerid
+            cd domains/pxsa.org/callerid
             git pull https://${{ secrets.KEY_PRIVATE }}@github.com/mostafahossam168/callerid.git
 
 
