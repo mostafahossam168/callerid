@@ -9,15 +9,16 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    public function login(){
+    public function login()
+    {
         $user = User::where('email', request()->email)->first();
-    if ($user and $user->type == 'admin') {
-        if (Auth::attempt(['email' => request('email'), 'password' => request('password')])) {
-            return redirect()->route('admin.home');
-        } else {
-            return back()->with('error','نأسف لكن كلمة المرور أو البريد الالكتروني غير صحيح');
+        if ($user and $user->type == 'admin') {
+            if (Auth::attempt(['email' => request('email'), 'password' => request('password')])) {
+                return redirect()->route('admin.home');
+            } else {
+                return back()->with('error', 'نأسف لكن كلمة المرور أو البريد الالكتروني غير صحيح');
+            }
         }
-    }
-    return back()->with('error','نأسف لكن كلمة المرور أو البريد الالكتروني غير صحيح');
+        return back()->with('error', 'نأسف لكن كلمة المرور أو البريد الالكتروني غير صحيح');
     }
 }

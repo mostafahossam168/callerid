@@ -1,9 +1,0 @@
-.newAppoints {
-  .newAppoints-content {
-    .dates-info {
-      @include maxWidth(md) {
-        width: 75% !important;
-      }
-    }
-  }
-}

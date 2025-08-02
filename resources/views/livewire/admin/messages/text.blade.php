@@ -1,25 +1,30 @@
-<div>
-    <nav aria-label="breadcrumb ">
-        <ol class="breadcrumb bg-light p-3">
-            <a href="{{ route('admin.home') }}" class="breadcrumb-item " aria-current="page">{{ __('admin.home') }}</a>
-            <li class="breadcrumb-item active" aria-current="page">مكتبة الرسائل النصية</li>
-        </ol>
-    </nav>
-    <x-message-admin></x-message-admin>
-    <div class="btn-holder">
-        <button wire:click='$set("screen","create")' class="main-btn">اضافة <i class="fas fa-plus"></i></button>
+<div class="main-side">
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div class="main-title">
+            <div class="small">
+                @lang('Home')
+            </div>
+            <div class="large">
+                @lang('admin.text_messages')
+            </div>
+        </div>
     </div>
+    <x-admin-alert></x-admin-alert>
+
     @if ($screen == 'index')
         <div class="table-responsive">
-
-            <table class="table main-table" id="prt-content">
+            <div class="btn-holder">
+                <button wire:click='$set("screen","create")' class="main-btn">@lang('Add') <i
+                        class="fas fa-plus"></i></button>
+            </div>
+            <table class="main-table">
                 <thead>
                     <tr>
                         <th>
                             #
                         </th>
-                        <th>المحتوي</th>
-                        <th>العمليات</th>
+                        <th>@lang('Content')</th>
+                        <th>@lang('Actions')</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -48,10 +53,10 @@
                                                 </div>
                                                 <div class="modal-body">
                                                     <div class="table-responsive">
-                                                        <table class="table main-table">
+                                                        <table class="table table-hover">
                                                             <tbody>
                                                                 <tr>
-                                                                    <th>المحتوي</th>
+                                                                    <th>@lang('Content')</th>
                                                                     <td>{{ $msg->content }} </td>
                                                                 </tr>
                                                             </tbody>
@@ -68,9 +73,30 @@
                                     <button wire:click='edit({{ $msg->id }})'>
                                         <i class="fas fa-pen text-info icon-table"></i>
                                     </button>
-                                    <button wire:click='delete({{ $msg->id }})'>
+                                    <button data-bs-toggle="modal" data-bs-target="#deleteModal{{ $msg->id }}">
                                         <i class="fas fa-trash text-danger icon-table"></i>
                                     </button>
+
+                                    <div class="modal fade" id="deleteModal{{ $msg->id }}" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">حذف </h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    هل انت متأكد من الحذف؟
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary btn-sm px-3"
+                                                        data-bs-dismiss="modal">الغاء</button>
+                                                    <button data-bs-dismiss="modal" class="btn btn-danger btn-sm px-3"
+                                                        wire:click='delete({{ $msg->id }})'>حذف</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </td>
                         </tr>
@@ -81,6 +107,7 @@
                     @endforelse
                 </tbody>
             </table>
+
         </div>
     @else
         @include('livewire.admin.messages.create')

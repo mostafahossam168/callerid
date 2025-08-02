@@ -1,18 +1,21 @@
-@include('admin.layouts.header')
-@include('admin.layouts.navbar')
-<div class="app">
-    @include('admin.layouts.menu')
-    <div class="main-side">
-        <div class="content">
-            <x-message-admin></x-message-admin>
-            @yield('content')
-        </div>
-        <div class="footer-app d-flex align-items-center justify-content-end gap-2">
-            <a href="https://www.const-tech.org/">
-                جميع الحقوق محفوظة لـ  كوكبة التقنية  2022
-                <img src="{{ asset('img/footer/copy.png') }}" class="logo me-2" alt="logo_login">
-            </a>
-        </div>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+@include('admin.layouts.parts.head')
+
+<body>
+    <!-- Start layout -->
+    @include('admin.layouts.parts.navbar')
+    <div class="app">
+        @include('admin.layouts.parts.sidebar')
+        @yield('content')
+        <footer class="main-footer">
+  جميع الحقوق محفوظة لـ <a href="https://www.const-tech.org/">كوكبة التقنية</a> . © 2024
+</footer>
     </div>
-</div>
-@include('admin.layouts.footer')
+    <!-- End layout -->
+    <!-- Js Files -->
+    @include('admin.layouts.parts.footer')
+</body>
+
+</html>

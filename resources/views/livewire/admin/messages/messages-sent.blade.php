@@ -2,7 +2,7 @@
     <div class="d-flex align-items-center justify-content-between mb-4">
         <div class="main-title">
             <div class="small">
-                الرئيسية
+                @lang("Home")
             </div>
             <div class="large">
                 الرسائل المرسلة
@@ -10,14 +10,14 @@
         </div>
     </div>
     <div class="table-responsive">
-        <a href="{{ route('admin.SendMessage') }}" wire:navigate class="main-btn">اضافة <i class="fas fa-plus"></i></a>
+        <a href="{{ route('admin.SendMessage') }}"  class="main-btn">@lang("Add") <i class="fas fa-plus"></i></a>
         <table class="main-table">
             <thead>
                 <tr>
                     <th>
                         #
                     </th>
-                    <th>المحتوي</th>
+                    <th>@lang("Content")</th>
                     <th>المرفق</th>
                 </tr>
             </thead>

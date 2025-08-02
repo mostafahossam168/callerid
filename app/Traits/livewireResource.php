@@ -2,16 +2,18 @@
 
 namespace App\Traits;
 
+use ReflectionClass;
 use Illuminate\Support\Str;
 use Livewire\WithPagination;
-use ReflectionClass;
+use Livewire\WithFileUploads;
 
 trait livewireResource
 {
-    public $model, $obj, $screen = 'index', $keys, $data;
+    public  $obj, $screen = 'index', $keys, $data;
     use WithPagination;
+    use WithFileUploads;
     protected $paginationTheme = 'bootstrap';
-    public function booted()
+    public function __construct()
     {
         $this->setModelName();
         $this->keys = array_keys($this->rules());
@@ -24,7 +26,7 @@ trait livewireResource
         $array = explode('\\', $model);
         $model = str_replace('Controller', '', end($array));
         $model = Str::singular($model);
-
+        //dd($model);
         if (!isset($this->model)) {
             if (class_exists('App\\Models\\' . $model)) {
 
@@ -35,41 +37,51 @@ trait livewireResource
                 $this->model = 'App\\Model\\' . $model;
             }
         }
+        // dd($this->model);
     }
 
-    public function beforeSubmit() {}
-    public function beforeCreate() {}
+    public function beforeSubmit()
+    {
+    }
+    public function beforeCreate()
+    {
+    }
 
     public function submit()
     {
         $this->data = $this->validate();
         $this->beforeSubmit();
+
         if ($this->obj) {
             $this->beforeUpdate();
             $this->obj->update($this->data);
             $this->afterUpdate();
-            $this->afterSubmit();
-            $this->obj = null;
-            $this->resetInputs();
-            $this->screen = 'index';
-            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'تم التعديل بنجاح']);
         } else {
             $this->beforeCreate();
-            $this->model::create($this->data);
+            $this->obj = $this->model::create($this->data);
             $this->afterCreate();
-            $this->afterSubmit();
-            $this->obj = null;
-            $this->resetInputs();
-            $this->screen = 'index';
-            $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'تم الحفظ بنجاح']);
         }
+        $this->afterSubmit();
+        $this->obj = null;
+        $this->resetInputs();
+        $this->screen = 'index';
+        // $this->dispatch('alert', ['ss','sss']);
+        session()->flash('success', 'تم الحفظ بنجاح');
     }
 
-    public function afterSubmit() {}
-    public function afterCreate() {}
+    public function afterSubmit()
+    {
+    }
+    public function afterCreate()
+    {
+    }
 
-    public function whileEditing() {}
-    public function beforeUpdate() {}
+    public function whileEditing()
+    {
+    }
+    public function beforeUpdate()
+    {
+    }
 
     public function edit($id)
     {
@@ -87,13 +99,16 @@ trait livewireResource
         $this->screen = 'edit';
     }
 
-    public function afterUpdate() {}
+    public function afterUpdate()
+    {
+    }
 
     public function delete($id)
     {
         $delete = $this->model::findOrFail($id);
         $delete->delete();
-        $this->dispatchBrowserEvent('alert', ['type' => 'success',  'message' => 'تم الحذف بنجاح']);
+        // $this->dispatch('alert', ['type' => 'success', 'message' => __('Deleted.')]);
+        session()->flash('success', 'تم الحذف بنجاح');
     }
 
     public function updatedScreen()

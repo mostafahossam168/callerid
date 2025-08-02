@@ -1,45 +1,71 @@
-@include('front.layouts.head')
-@if (session()->has('error'))
-<div class="alert alert-danger" role="alert">
-    {{ session()->get('error') }}
-</div>
-@endif
+@include('admin.layouts.parts.head')
 
-
-
-
-<section class="page-login">
-                <form class="form-login" action="{{ route('admin.login.post') }}" method="POST">
-                    @csrf
-                    <div class="box-login">
-                        <div class="img-login">
-                            <img src="{{ asset('img/login/login-office.jpeg') }}" alt="">
-                        </div>
-                        <div class="content-login">
-                            <div class="w-100">
-                                <div class="badge-text mx-auto mb-3 w-100 ">
-                                    لوحة الادارة
-                                </div>
-                                <h3 class="title"> تسجيل الدخول</h3>
-
-                                    <div class="lable">البريد الالكتروني</div>
-                                    <input name="email" type="email" class="form-control" placeholder="البريد الالكتروني" />
-
-                                    <div class="lable mt-3">كلمة السر</div>
-                                    <input name="password" type="password" class="form-control" placeholder="كلمة السر" required />
-                                    <!-- <div class="lable mt-3">الدخول كا</div> -->
-
-                                <button class="btn sub" type="submit">
-                                    دخول
-                                </button>
-                                <hr class="my-4">
-                                <div class="d-flex align-items-center justify-content-center">
-                                    {{__('admin.Programming_and_development_of_Tech_Constellation')}}
-                                    <img src="{{ asset('img/login/LOGO3.png') }}" alt="" class="logo-footer">
-                                </div>
-                            </div>
+<!-- Start layout -->
+<section class="login_page">
+    <div class="box-col box-bg d-flex flex-column justify-content-between align-items-center gap-5 align-items-xl-start">
+        <img src="{{asset('admin-asset')}}/img/login/login-bg.svg" alt="img-bg" class="bg" />
+        <span class="logo-holder">
+            <img src="{{ asset('admin-asset/img/login/footer-logo.png') }}" alt="" class="logo-bg">
+            كوكبة التقنية
+        </span>
+        <div class="text-bg">
+            <div class="title">
+                كوكبة التقنية
+            </div>
+            <div class="p">
+                خدمات مميزة وتجربة جديدة
+            </div>
+        </div>
+        <div class="text-bg-2">
+        بدئنا من حيث أنتهى الآخرون
+        </div>
+    </div>
+    <div class="box-col d-flex flex-column justify-content-center py-xl-0">
+        @if (session()->has('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                {{ session()->get('error') }}
+            </div>
+        @endif
+        <form action="{{ route('admin.login.post') }}" method="POST" class="form_content">
+            @csrf
+            <img src="{{asset('admin-asset')}}/img/login/logo-icon.png" alt="logo" class="logo-form" />
+            <h3 class="header_title">
+                <div class="title">مرحبا بك</div>
+                <div class="text">أدخل البريد الالكتروني وكلمة السر للدخول</div>
+            </h3>
+            <div class="row gap-3">
+                <div class="col-12">
+                    <label for="" class="label">البريد الالكتروني</label>
+                    <div class="group-inp">
+                        <input type="email" placeholder="name@company.com" name="email" id="" class="inp">
+                        <div class="box">
+                        <img src="{{asset('admin-asset')}}/img/login/sms.svg" class="icon" alt="">
                         </div>
                     </div>
-                </form>
-</section>
+                </div>
+                <div class="col-12 mb-4">
+                    <label for="" class="label">كلمة السر</label>
+                    <div class="group-inp">
+                        <input type="password" placeholder="أدخل كلمة المرور" name="password" id="" class="inp inp-pass">
+                        <div class="box box-btn" onclick="showPsss('.inp-pass')">
+                        <img src="{{asset('admin-asset')}}/img/login/eye.svg" class="icon" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 mb-4 d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center gap-2">
+                        <input type="checkbox" name="" id="">
+                        تذكرني دائما
+                    </div>
+                    <a href="" class="reseat">نسيت كلمة المرور؟</a>
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="sub_btn btn btn-primary w-100">دخول</button>
+                </div>
+            </div>
+        </form>
+    </div>
 
+</section>
+<!-- End layout -->

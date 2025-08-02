@@ -9,15 +9,15 @@ class WhatsappMessage extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['message', 'image', 'patient_id', 'user_id'];
+    protected $fillable = ['message', 'image', 'client_id', 'user_id','program_id'];
 
-    public function patient()
+    public function client()
     {
-        return $this->belongsTo(Patient::class, 'patient_id')->withDefault();
+        return $this->belongsTo(Client::class, 'client_id')->withDefault();
     }
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id')->withTrashed()->withDefault();
+        return $this->belongsTo(User::class, 'user_id')->withDefault();
     }
 }

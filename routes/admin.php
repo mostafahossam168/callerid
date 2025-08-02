@@ -1,116 +1,121 @@
 <?php
 
-use App\Http\Livewire\Admin\Profile;
-use Illuminate\Support\Facades\Route;
-use App\Http\Livewire\Admin\Home\Home;
-use App\Http\Livewire\Admin\Roles\Roles;
-use App\Http\Livewire\Admin\Users\Users;
-use App\Http\Livewire\Admin\Admins\Admins;
-use App\Http\Livewire\Admin\ConstSettings;
-use App\Http\Livewire\Admin\Messages\Text;
-use App\Http\Controllers\Admin\LabCategory;
-use App\Http\Livewire\Admin\Messages\Image;
-use App\Http\Controllers\Admin\LabController;
+use App\Http\Controllers\Admin\ArticlesController;
 use App\Http\Controllers\Admin\AuthController;
-use App\Http\Controllers\Admin\CityController;
-use App\Http\Controllers\Admin\FormController;
-use App\Http\Controllers\Admin\RoleController;
-use App\Http\Controllers\Admin\RoomController;
-use App\Http\Livewire\Admin\Settings\Settings;
-use App\Http\Controllers\Admin\UsersController;
-use App\Http\Controllers\Admin\StrainController;
-use App\Http\Controllers\Admin\SubmitController;
-use App\Http\Livewire\Admin\SendMessageSettings;
-use App\Http\Controllers\Admin\CountryController;
-use App\Http\Controllers\Admin\MessageController;
-use App\Http\Controllers\Admin\ProductController;
-use App\Http\Controllers\Admin\ProfileController;
-use App\Http\Controllers\Admin\ServiceController;
-use App\Http\Livewire\Admin\Messages\SendMessage;
-use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\PatientsController;
-use App\Http\Controllers\Admin\QuestionController;
-use App\Http\Controllers\Admin\RememberController;
-use App\Http\Controllers\Admin\SettingsController;
-use App\Http\Livewire\Admin\Messages\MessagesSent;
-use App\Http\Controllers\Admin\InsuranceController;
-use App\Http\Controllers\Admin\DepartmentController;
-use App\Http\Controllers\Admin\ScanServiceController;
-use App\Http\Controllers\Admin\RelationshipController;
-use App\Http\Controllers\Admin\ProductPercentController;
+use App\Http\Controllers\Admin\ContactUsController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\PrivacyPolicyController;
+use App\Http\Controllers\Admin\TicketController;
+use App\Http\Controllers\Admin\UsagePolicyController;
+use App\Livewire\Admin\Categories;
+use App\Livewire\Admin\Cities;
+use App\Livewire\Admin\Clients;
+use App\Livewire\Admin\Contacts;
+use App\Livewire\Admin\Countries;
+use App\Livewire\Admin\EmailMenu;
+use App\Livewire\Admin\Gifts;
+use App\Livewire\Admin\Menus;
+use App\Livewire\Admin\Messages\Image;
+use App\Livewire\Admin\Messages\MessagesSent;
+use App\Livewire\Admin\Messages\SendMessage;
+use App\Livewire\Admin\Messages\Text;
+use App\Livewire\Admin\Pages;
+use App\Livewire\Admin\Programs;
+use App\Livewire\Admin\Roles;
+use App\Livewire\Admin\Settings;
+use App\Livewire\Admin\SubCategories;
+use App\Livewire\Admin\Users;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Route;
+use Livewire\Livewire;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
+|
+*/
 
 Route::group(
     [
         'prefix' => LaravelLocalization::setLocale(),
         'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath']
     ],
-    function () { //...
-        Route::view('admin/login', 'admin.login')->middleware('admin_guest')->name('admin.login');
-        Route::post('admin/login', [AuthController::class, 'login'])->middleware('admin_guest')->name('admin.login.post');
+    function () {
+        Route::prefix('admin')->group(function () {
+            Livewire::setUpdateRoute(function ($handle) {
+                return Route::post('/livewire/update', $handle);
+            });
 
-        Route::group(['middleware' => 'admin', 'as' => 'admin.', 'prefix' => 'admin'], function () {
-            Route::view('/', 'admin.home')->name('home');
-            Route::view('settings', 'admin.settings')->name('settings');
+            Route::view('login', 'admin.login')->middleware('admin_guest')->name('login');
+            Route::post('login', [AuthController::class, 'login'])->middleware('admin_guest')->name('login.post');
 
-            Route::post('settings', [SettingsController::class, 'settings'])->name('settings.update');
-            Route::get('profile', [ProfileController::class, 'show'])->name('profile');
-            Route::post('profile', [ProfileController::class, 'update'])->name('profile.update');
-            Route::resource('departments', DepartmentController::class);
-            Route::resource('categories', CategoryController::class);
-            Route::resource('relationships', RelationshipController::class);
-            Route::resource('cities', CityController::class);
-            Route::resource('strains', StrainController::class);
+            Route::group(['middleware' => 'admin'], function () {
 
-            Route::resource('countries', CountryController::class);
-            Route::resource('rooms', RoomController::class);
-            Route::resource('users', UsersController::class);
-            Route::resource('product_percents', ProductPercentController::class);
-            Route::resource('patients', PatientsController::class);
-            Route::resource('forms', FormController::class);
-            Route::resource('invoices', \App\Http\Controllers\Admin\InvoiceController::class)->only('index', 'show');
-            Route::resource('appointments', \App\Http\Controllers\Admin\AppointmentController::class)->only('index', 'show');
-            Route::resource('diagnoses', \App\Http\Controllers\Admin\DiagnosesController::class);
-            Route::resource('roles', RoleController::class);
-            Route::resource('products', ProductController::class);
-            Route::resource('insurances', InsuranceController::class);
-            Route::resource('labs', LabController::class);
-            Route::resource('lab-categories', LabCategory::class);
-            Route::resource('scan-services', ScanServiceController::class);
-            Route::resource('services', ServiceController::class);
-            // questions editing
-            Route::resource('questions', QuestionController::class);
-            Route::get('ar/admin/add-video', [QuestionController::class, "add_video"])->name("questions.add_video");
-            Route::post('ar/admin/store-video', [QuestionController::class, "store_video"])->name("questions.store_video");
-            Route::get('ar/admin/add-images', [QuestionController::class, "add_images"])->name("questions.add_images");
-            Route::post('ar/admin/store-images', [QuestionController::class, "store_images"])->name("questions.store_images");
-            Route::resource('sms', RememberController::class);
+                Route::get('/', [DashboardController::class, 'index'])->name('home');
+                Route::get('settings', Settings::class)->name('settings');
+                Route::get('programs', Programs::class)->name('programs');
+                Route::get('cities', Cities::class)->name('cities');
+                Route::get('countries', Countries::class)->name('countries');
+                Route::get('clients', Clients::class)->name('clients');
+                Route::get('gifts', Gifts::class)->name('gifts');
+                Route::get('contacts', Contacts::class)->name('contacts');
+                Route::get('categories', Categories::class)->name('categories');
+                Route::get('sub_categories', SubCategories::class)->name('sub-categories');
+                Route::view('/all_articles', 'admin.articles.index')->name('all_articles');
+                Route::resource('articles', ArticlesController::class);
+                // Route::resource('articles', ArticlesController::class);
 
-            Route::resource('submits', SubmitController::class);
+                Route::get('gifts' , \App\Livewire\Admin\Gifts::class)->name('gifts');
+                Route::get('menus', Menus::class)->name('menus');
+                Route::get('pages', Pages::class)->name('pages');
 
-            /* ********************** Livewire ********************* */
-            Route::view('/admin/program-update', 'admin.program-update')->name('program-update');
-            Route::view('stores', 'admin.stores.index')->name('stores');
-            Route::view('kinds', 'admin.kinds.index')->name('kinds');
-            Route::view('supplies', 'admin.supplies.index')->name('supplies');
-            Route::view('faqs', 'admin.faqs.index')->name('faqs');
+                Route::get('users', Users::class)->name('users');
+                Route::get('roles', Roles::class)->name('roles');
+                Route::get('text-message', Text::class)->name('texts');
+                Route::get('images-message', Image::class)->name('images');
+                Route::get('sendMessage', SendMessage::class)->name('SendMessage');
+                Route::get('MessagesSent', MessagesSent::class)->name('MessagesSent');
+                Route::resource('contact-us', ContactUsController::class);
+                Route::get('contactes', \App\Livewire\Admin\ContactUs::class)->name('contactes');
+                Route::get('email_menu', EmailMenu::class)->name('email_menu');
 
-            Route::get('massage', [MessageController::class, 'setting'])->name('massage.index');
-            Route::post('/message/settings', [MessageController::class, 'settingStore'])->name('message.setting.store');
-            Route::resource('notifications', \App\Http\Controllers\Admin\NotificationController::class)
-                ->only('index', 'destroy');
+                Route::resource('/library', \App\Http\Controllers\Admin\LibraryController::class);
+                Route::post('/library/deleteAll', [\App\Http\Controllers\Admin\LibraryController::class, 'deleteAll'])->name('library.deleteAll');
+                Route::get('/vendors', \App\Livewire\Admin\Vendors::class)->name('vendors.index');
+                //    Route::view('/vendors/create', 'admin.vendors.create')->name('vendors.create');
+                //    Route::view('/vendors/edit', 'admin.vendors.edit')->name('vendors.edit');
+                //
+                Route::view('/articles-categories', 'admin.articles-categories.index')->name('articles-categories.index');
+                Route::view('/articles-categories/create', 'admin.articles-categories.createOrUpdate')->name('articles-categories.create');
+                Route::view('/articles-categories/edit', 'admin.articles-categories.edit')->name('articles-categories.edit');
 
-            Route::get('message_library/text_message', Text::class)->name('message_library.texts');
-            Route::get('message_library/images_message', Image::class)->name('message_library.images');
-            Route::get('message_library/send_message', SendMessage::class)->name('message_library.send_message');
-            Route::get('message_library/messages_settings', SendMessageSettings::class)->name('message_library.send_message_settings');
-            Route::get('message_library/sent_messages', MessagesSent::class)->name('message_library.sent_messages');
+                Route::view('/sliders', 'admin.sliders.index')->name('sliders.index');
 
-            Route::get('const', ConstSettings::class)->name('const');
+                Route::resource('tickets', TicketController::class);
+                Route::post('tickets/storeComment', [TicketController::class, 'storeComment'])->name('tickets.storeComment');
+
+                // livewire
+                Route::get('products', \App\Livewire\Admin\Products::class)->name('products');
+                Route::view('/articles', 'admin.articles.index')->name('articles.index');
+                // livewire
+                Route::get('products', \App\Livewire\Admin\Products::class)->name('products');
+                // Route::view('/articles', 'admin.articles.index')->name('articles.index');
+
+                Route::get('/notifications', \App\Livewire\Admin\Notifications::class)->name('notifications.index');
+                Route::resource('privacy-policy', PrivacyPolicyController::class)->only('index', 'update');
+                Route::resource('usage-policy', UsagePolicyController::class)->only('index', 'update');
+                Route::get('/generate-translation', function () {
+                    Artisan::call('translations:find');
+                    return back()->with('success', 'تم بنجاح !');
+                })->name('generate-translation');
+                //    Route::view('/notifications/create','admin.notifications.create')->name('notifications.create');
+            });
         });
     }
 );
-Route::get('select2-patients',[\App\Http\Controllers\Admin\Select2Pagination::class,'patients'])
-    ->name('select2-patients')
-    ->middleware('admin')
-;

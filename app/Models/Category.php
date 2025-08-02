@@ -8,22 +8,35 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
     use HasFactory;
+
     protected $guarded = [];
-    public function main()
+
+    public function status()
     {
-        return $this->belongsTo(Self::class, 'parent');
+        return $this->status ? 'مفعل' : 'غير مفعل';
     }
-    public function kids()
+    public function created_at()
     {
-        return $this->hasMany(Self::class, 'parent');
-    }
-    public function expenses()
-    {
-        return $this->hasMany(Expense::class, 'category_id');
+        return $this->created_at->format('Y-m-d');
     }
 
-    public function animals()
+    public function parent()
     {
-        return $this->hasMany(Animal::class, 'category_id');
+        return $this->hasOne(Category::class, 'id', 'parent_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(Category::class, 'parent_id', 'id');
+    }
+
+    // public function subdepartments(): HasMany
+    // {
+    //     return $this->hasMany(Subdepartment::class);
+    // }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
     }
 }

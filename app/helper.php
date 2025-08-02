@@ -2,30 +2,62 @@
 
 use Illuminate\Support\Facades\Storage;
 
-function store_file($file,$path)
+function store_file($file, $path)
 {
-    $name = time().$file->getClientOriginalName();
+    $name = time() . $file->getClientOriginalName();
     return $value = $file->storeAs($path, $name, 'uploads');
 }
 function delete_file($file)
 {
-    if($file!='' and !is_null($file) and Storage::disk('uploads')->exists($file)){
-        unlink('uploads/'.$file);
+    if ($file != '' and !is_null($file) and Storage::disk('uploads')->exists($file)) {
+        unlink('uploads/' . $file);
     }
 }
 function display_file($name)
 {
-    return asset('uploads').'/'.$name;
+    return asset('uploads') . '/' . $name;
 }
-function setting(){
-    return \App\Models\Setting::query()->first();
-}
-function doctor(){
-    return \App\Models\Doctor::query()->find(auth()->id());
+function deviceId()
+{
+    return request()->header('X-DEVICE-ID');
 }
 
-function getProductQuantityInWarehouse(\App\Models\PharmacyMedicine $medicine,\App\Models\PharmacyWarehouse $warehouse){
-   return $medicine->quantities()->wherePharmacyWarehouseId($warehouse->id)->charge()->sum('quantity')
-        - $medicine->quantities()->where('from_warehouse_id',$warehouse->id)->expense()->sum('quantity')
-        - \App\Models\PrescriptionItem::where('pharmacy_medicine_id',$medicine)->sum('quantity');
+
+
+function countryCode()
+{
+    return [
+        "20",  // Egypt
+        "966", // Saudi Arabia
+        "971", // UAE
+        "1",   // USA and Canada
+        "44",  // United Kingdom
+        "33",  // France
+        "49",  // Germany
+        "39",  // Italy
+        "34",  // Spain
+        "61",  // Australia
+        "81",  // Japan
+        "86",  // China
+        "91",  // India
+        "52",  // Mexico
+        "55",  // Brazil
+        "61",  // Australia
+        "63",  // Philippines
+        "64",  // New Zealand
+        "351", // Portugal
+        "966", // Saudi Arabia
+        "82",  // South Korea
+        "7",   // Russia
+        "84",  // Vietnam
+        "56",  // Chile
+        "90",  // Turkey
+        "971", // UAE
+        "380", // Ukraine
+        "972", // Israel
+        "377", // Monaco
+        "380", // Ukraine
+        "212", // Morocco
+        "213"  // Algeria
+    ];
 }

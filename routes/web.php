@@ -1,50 +1,70 @@
 <?php
 
-use App\Models\Invoice;
-use App\Models\Notification;
-use App\Models\Patient;
-use App\Http\Livewire\Front\Home;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\ContactUsController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\BackupController;
-use App\Http\Controllers\Admin\QuestionController;
-use App\Http\Controllers\Front\PatientsController;
 
-require __DIR__ . '/admin.php';
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
-//  Route::get('{any}', function() {
-//     return redirect()->route('admin.login');
-// })->where('any', '.*');
-
-Route::post('backup-database', [BackupController::class, 'backupDatabase'])->name('backup-database');
-Route::view('/404', '404');
-Route::view('doctor/medicalInfo', 'doctor/medicalInfo');
-
-// Route::get('/guide', [QuestionController::class, "get_all_questions"])->name('guide');
-Route::view('/program-update', 'admin.program-update')->name('program-update');
+use Illuminate\Http\Request;
 
 
-require_once __DIR__ . '/fortify.php';
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
+|
+*/
 
-Route::group(['prefix' => 'pharmacy'], function () {
-    Route::view('/', 'pharmacy.home')->name('home');
-});
+Route::group(
+    [
+        'prefix' => LaravelLocalization::setLocale(),
+        'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath']
+    ],
+    function () {
+        Auth::routes();
+        Route::get('/', [DashboardController::class, 'index'])->name('home')->middleware('admin');
 
-Route::view('/animals/add-item', 'front/animals/add-item')->name('front.add-item');
+        // Route::get('/', function () {
+        //     return view('front.index');
+        // })->name('home');
 
-Route::view('admin/analysisLab', 'admin/analysisLab')->name('analysisLab');
-Route::view('invoices/pill', 'front/invoice/pill')->name('pill');
-Route::view('ar/showBonds', 'front.invoice.showBonds')->name('showBonds');
-Route::get('test', function () {
-    $notification_ids = Notification::whereNotNull('invoice_id')->pluck('invoice_id')->toArray();
+        // Route::view('articles', 'front.article')->name('articles');
+        // Route::view('contact', 'front.contact')->name('contact');
+        // Route::post('contact/store', [ContactUsController::class, 'store'])->name('contact.store');
+        // Route::view('contracts', 'front.contracts')->name('contracts');
+        // Route::view('jobs', 'front.jobs')->name('jobs');
+        // Route::view('notice', 'front.notice')->name('notice');
+        // Route::view('profile', 'front.profile')->name('profile');
+        // Route::view('reseat', 'front.reseat')->name('reseat');
+        // Route::view('show-administrative-job', 'front.show-administrative-job')->name('show-administrative-job');
+        // Route::view('show-employer-job', 'front.show-employer-job')->name('show-employer-job');
+        // Route::view('settings', 'front.site-settings')->name('settings');
+        // Route::view('subscriptions', 'front.subscription')->name('subscriptions');
+        // Route::view('treasury', 'front.treasury')->name('treasury');
+        // Route::view('users', 'front.users')->name('users');
 
-    return  Invoice::whereRelation('department', 'is_hotel_service', 1)
-        ->where('departure_date', now()->addDay()->format('Y-m-d'))
-        ->whereNotIn('id', $notification_ids)
-        ->get();
-});
+        // Route::view('tickets', 'front.tickets.index')->name('tickets.index');
+        // Route::view('tickets/create', 'front.tickets.create')->name('tickets.create');
+        // Route::view('tickets/show', 'front.tickets.show')->name('tickets.show');
 
 
-Route::get('select2/patients', [\App\Http\Controllers\Select2Pagination::class, 'patients']);
-Route::get('select2/products', [\App\Http\Controllers\Select2Pagination::class, 'products']);
-Route::get('select2/animals', [\App\Http\Controllers\Select2Pagination::class, 'animals']);
-Route::get('select2/items', [\App\Http\Controllers\Select2Pagination::class, 'items']);
+    }
+);
+
+/* ckeditor upload images */
+Route::post('/upload_images', function (Request $request) {
+    $image = $request->file('upload');
+    $imageName = time() . '.' . $image->getClientOriginalExtension();
+    $uploadPath = public_path('uploads/articles');
+    $resizedImage = \Intervention\Image\Facades\Image::make($image)->resize(600, 600, function ($constraint) {
+        $constraint->aspectRatio();
+    });
+    $resizedImage->save($uploadPath . '/' . $imageName);
+    return response()->json(['uploaded' => 1, 'url' => display_file('/articles/' . $imageName)]);
+})->name('image.upload');
