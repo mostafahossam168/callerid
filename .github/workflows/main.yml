@@ -33,3 +33,14 @@ jobs:
               cd callerid
             fi
 
+
+            echo "🔑 Generating app key"
+            php ~/composer.phar install --no-interaction --prefer-dist
+            cp .env.example .env
+            php artisan key:generate
+
+            echo "🧼 Clearing cache"
+            php artisan config:clear
+            php artisan route:clear
+            php artisan view:clear
+
